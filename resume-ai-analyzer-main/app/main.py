@@ -1,6 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.endpoints.upload import router as upload_router
+from pdf2image import convert_from_bytes
+import base64
+from io import BytesIO
+
+
 
 app = FastAPI(
     title="Resume AI Analyzer",
@@ -36,3 +42,25 @@ async def health_check():
         "status": "healthy",
         "message": "Service is running normally"
     }
+
+@app.post("/preview/")
+async def generate_preview(file: UploadFile = File(...)):
+    # Read the PDF file into memory
+    pdf_data = await file.read()
+    
+    # Convert the PDF pages to images
+    images = convert_from_bytes(pdf_data)
+    
+    # Encode the images as base64 strings with numbered labels
+    preview_images = []
+    for i, img in enumerate(images):
+        buffer = BytesIO()
+        img.save(buffer, format="JPEG")
+        img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        preview_images.append({
+            "page": i + 1,
+            "image": f"data:image/jpeg;base64,{img_base64}"
+        })
+    
+    # Return the numbered images
+    return JSONResponse(content={"preview_images": preview_images})
