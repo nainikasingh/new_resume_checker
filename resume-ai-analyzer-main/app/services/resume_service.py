@@ -627,7 +627,7 @@ def analyze_keywords(text: str) -> Dict:
         'bachelor', 'project management', 'computer science', 'certifications in scrum (CSM)'
     ]
 },
-'Frontend Developer': {
+'Frontend Developer' or 'WordPress Developer': {
     'technical_skills': [
         'html', 'css', 'javascript', 'react', 'angular', 'vue.js', 'jquery', 'sass', 'responsive design', 
         'cross-browser compatibility', 'web performance optimization', 'frontend frameworks'
