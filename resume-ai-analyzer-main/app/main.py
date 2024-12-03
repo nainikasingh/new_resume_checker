@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.endpoints.upload import router as upload_router
+from flask import Flask
+from flask_cors import CORS
 
 app = FastAPI(
     title="Resume AI Analyzer",
@@ -11,10 +13,10 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://nishantz3.sg-host.com","https://nishantz3.sg-host.com"],  # Allow all origins. Replace with specific origins in production.
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Allow all HTTP methods: GET, POST, etc.
+    allow_headers=["*"],  # Allow all headers
 )
 
 # Include routers

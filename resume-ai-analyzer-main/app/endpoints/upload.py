@@ -57,7 +57,19 @@ async def detailed_resume_analysis(file: UploadFile = File(...)):
         try:
             basic_analysis = analyze_resume(temp_file_path)
             detailed_scores = get_detailed_scores(temp_file_path, basic_analysis)
-            
+            response_data =  {
+                "detailed_scores": {
+                    "total_final_score": detailed_scores["total_final_score"],
+                    "grammar_final_score": detailed_scores["grammar_final_score"],
+                    "action_final_score": detailed_scores["action_final_score"],
+                    "ats_final_score": detailed_scores["ats_final_score"],
+                    "keywords_final_score": detailed_scores["keywords_final_score"],
+                    "page_length_final_score": detailed_scores["page_length_final_score"]
+                },
+                "analysis_details": basic_analysis,
+                "improvement_suggestions": detailed_scores["suggestions"]
+            }
+            print(f"response send: {response_data}")
             return {
                 "detailed_scores": {
                     "total_final_score": detailed_scores["total_final_score"],
