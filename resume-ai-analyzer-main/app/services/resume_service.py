@@ -660,11 +660,20 @@ def analyze_keywords(text: str) -> Dict:
     # Convert the input text to lowercase for case-insensitive matching
     text_lower = text.lower()
     
-    # Check if the job profile is 'Researcher'
-    if 'researcher' in text_lower:
-        # Extract the keywords and analyze their presence in the text
-        profile = 'Researcher'
-        keywords = keyword_categories[profile]
+    # Initialize detected profile as None
+    detected_profile = None
+    
+    # Dynamically detect the profile based on keywords in `keyword_categories`
+    for profile, keywords in keyword_categories.items():
+        # Check if any keyword associated with the profile exists in the text
+        if any(keyword.lower() in text_lower for keyword in keywords):
+            detected_profile = profile
+            break
+    
+    # If a profile is detected, analyze its keywords
+    if detected_profile:
+        results['profile'] = detected_profile
+        keywords = keyword_categories[detected_profile]
         
         for category, category_keywords in keywords.items():
             found = [word for word in category_keywords if word in text_lower]
@@ -673,11 +682,11 @@ def analyze_keywords(text: str) -> Dict:
             results[category] = {
                 'found': found,
                 'missing': missing,
-                'score': len(found) / len(category_keywords)
+                'score': len(found) / len(category_keywords) if category_keywords else 0
             }
     else:
-        # If the job category is not 'Researcher', return 'job category not found'
-        results = {"message": "Job category not found"}
+        # Return message if no profile matches
+        results = {"message": "No matching job category found"}
     
     return results
 
