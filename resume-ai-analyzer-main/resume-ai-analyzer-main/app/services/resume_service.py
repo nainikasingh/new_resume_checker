@@ -748,6 +748,10 @@ def calculate_scores(text: str, sections: Dict, grammar_analysis: Dict, keyword_
 def analyze_resume(file_path: str) -> Dict:
     """Main function to analyze resume"""
     try:
+        print(f"Analyzing file: {file_path}")
+        #remove
+        print(f"Extracted text: {text[:200]}")
+        #remove
         text = extract_text(file_path)
         
         sections = {
@@ -755,11 +759,18 @@ def analyze_resume(file_path: str) -> Dict:
             'experience': bool(re.search(r'experience|work|employment|job', text, re.I)),
             'skills': bool(re.search(r'skills|technologies|tools|languages', text, re.I))
         }
-        
+        print(f"Sections identified: {sections}")
+        #remove
         grammar_analysis = analyze_grammar(text)
+        print(f"Grammar analysis: {grammar_analysis}")
+        #remove
         keyword_analysis = analyze_keywords(text)
+        print(f"Keyword analysis: {keyword_analysis}")
+        #remove
         scores = calculate_scores(text, sections, grammar_analysis, keyword_analysis)
-        
+        print(f"Scores calculated: {scores}")
+        #remove
+        }
         return {
             'scores': scores,
             'sections_found': [k for k, v in sections.items() if v],
